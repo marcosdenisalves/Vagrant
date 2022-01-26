@@ -14,6 +14,11 @@ SCRIPT
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/bionic64"
 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 512
+    vb.cpus = 1
+  end
+
   # config.vm.define "mysqldb" do |mysql|
     
   #   mysql.vm.network "public_network", ip: "192.168.0.15"
@@ -35,6 +40,10 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "mysqlserver" do |mysqlserver|
 
+    mysqlserver.vm.provider "virtualbox" do |vb|
+      vb.name = "MySQL_Server"
+    end
+
     mysqlserver.vm.network "public_network", ip: "192.168.0.16"
 
     mysqlserver.vm.provision "shell",  
@@ -43,6 +52,10 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "phpweb" do |phpweb|
+    phpweb.vm.provider "virtualbox" do |vb|
+      vb.name = "PHP_Web"
+    end
+    
     phpweb.vm.network "forwarded_port", guest: 8888, host: 8888
     phpweb.vm.network "public_network", ip: "192.168.0.17"
 
@@ -56,6 +69,9 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "ansible" do |ansible|
+    ansible.vm.provider "virtualbox" do |vb|
+      vb.name = "Ansible_Provider"
+    end
 
     ansible.vm.network "public_network", ip: "192.168.0.18"
 
@@ -72,4 +88,15 @@ Vagrant.configure("2") do |config|
       
   end
 
+  config.vm.define "memcached" do |memcached|
+    memcached.vm.box = "centos/7"
+
+    memcached.vm.provider "virtualbox" do |vb|
+      vb.memory = 512
+      vb.cpus = 1
+      vb.name = "centos7_memcached"
+    end
+
+  end
+  
 end
